@@ -12,13 +12,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author 18114290041
  */
-@WebServlet(name = "OlaMundoServlet", urlPatterns = {"/OlaMundoServlet"})
-public class OlaMundoServlet extends HttpServlet {
+@WebServlet(name = "SessaoServlet", urlPatterns = {"/SessaoServlet"})
+public class SessaoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,38 +30,29 @@ public class OlaMundoServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-   
-    
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+
+        String nome = request.getParameter("nome");
+        if (nome != null && nome.isEmpty() == false) {
+            session.setAttribute("nome", nome);
+        }
+
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OlaMundo Servlet</title>");
+            out.println("<title>Servlet Sessao Servlet</title>");
             out.println("</head>");
             out.println("<body>");
-            
-
-            String nome = request.getParameter("nome");
-            if (nome != null && nome.isEmpty() == false) {
-                out.println("<h1>Olá " + nome + "!</h1>");
-            } else {
-                out.println("<h1>Olá Mundo!</h1>");
-            }
-            out.println("<a href=" + response.encodeURL(request.getContextPath()+"/index.html") + ">Voltar</a>");
+            //out.println("<h1>Servlet Sessao Servlet at " + request.getContextPath() + "</h1>");
+            out.println("<p><b>Id da Sessão:</b> " + session.getId() + "</p>");
+            out.println("<b>Nome salvo na sessão:</b> " + session.getAttribute("nome"));
             out.println("</body>");
             out.println("</html>");
         }
-        
-        
-        
-        
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -75,8 +67,7 @@ public class OlaMundoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath()+"/index.html");
-        
+        processRequest(request, response);
     }
 
     /**
