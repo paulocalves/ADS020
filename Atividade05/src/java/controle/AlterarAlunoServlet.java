@@ -7,8 +7,6 @@ package controle;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -19,26 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import modelo.AlunoBO;
 import modelo.NegocioException;
 import modelo.entidades.Aluno;
-import modelo.persistencia.AlunoDAO;
 
 /**
  *
  * @author 18114290041
  */
-@WebServlet(name = "ListarAlunoServlet", urlPatterns = {"/aluno"})
-public class ListarAlunoServlet extends HttpServlet {
+@WebServlet(name = "AlterarAlunoServlet", urlPatterns = {"/aluno/alterar"})
+public class AlterarAlunoServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-  
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -51,44 +37,40 @@ public class ListarAlunoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Aluno> lista = new ArrayList<Aluno>();
+        Aluno aluno = new Aluno();
+        int id = Integer.parseInt(request.getParameter("id"));
+        aluno.setId(id);
         AlunoBO bo = new AlunoBO();
 
         try {
-            lista = bo.listar();
+            aluno = bo.consultar(aluno);
         } catch (NegocioException ex) {
-            throw new ServletException("ERROOOOOOO", ex);
+            throw new ServletException("Erro ao Consultar", ex);
         }
-        
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+
         out.println("<!DOCTYPE html>");
         out.println("<html>");
         out.println("<head>");
         out.println("<title>Cadastro de Alunos</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<h1>Listagem de Alunos</h1>");
-        out.println("<a href='" + response.encodeURL("/Atividade05/aluno/incluir") + "'>Incluir</a>");
-        out.println("<table>");
-            out.println("<tr>");
-                out.println("<th>Nº</th>");
-                out.println("<th>Matrícula</th>");
-                out.println("<th>Nome</th>");
-                out.println("<th>Ações</th>");
-                out.println("</tr>");
-            int i = 0;
-            for(Aluno aluno: lista) {
-                
-                out.println("<tr>");
-                out.println("<td>"+ ++i + "</td>");
-                out.println("<td>" + aluno.getMatricula() + "</td>");
-                out.println("<td> - " + aluno.getNome() + "</td>");
-                out.println("<td> -  <a href='" + response.encodeURL("/Atividade05/aluno/alterar?id="+aluno.getId())+ " '>Alterar</a>");
-                out.println("<a href='" + response.encodeURL("/Atividade05/aluno/excluir?id=") + aluno.getId() + "' onclick='return confirm('Deseja excluir o aluno?');'>Excluir</a></td>");
-                out.println("</tr>");
-            }
-        out.println("</table>");
+        out.println("<h1>Alterar Aluno</h1>");
+        out.println("<form action=" + response.encodeURL("/Atividade05/aluno/alterar") + " method='post'>");
+        out.println("<input type='hidden' name='id' value='" + aluno.getId() + "'/>");
+        out.println("<div>");
+        out.println("<label>Matrícula:</label>");
+        out.println("<input type='text' name='matricula' size='15' value='" + aluno.getMatricula() + "'>");
+        out.println("</div>");
+        out.println("<div>");
+        out.println("<label>Nome:</label>");
+        out.println("<input type='text' name='nome' size='30' value='" + aluno.getNome() + "'>");
+        out.println("</div>");
+        out.println("<input type='submit' value='Salvar'/>");
+        out.println("<a href='/Atividade05/aluno'>Desistir</a>");
+        out.println("</form>");
         out.println("</body>");
         out.println("</html>");
 
@@ -105,7 +87,21 @@ public class ListarAlunoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        throw new ServletException("Método não suportado!");
+
+        Aluno aluno = new Aluno();
+        aluno.setId(Integer.parseInt(request.getParameter("id")));
+        aluno.setMatricula(Integer.parseInt(request.getParameter("matricula")));
+        aluno.setNome(request.getParameter("nome"));
+
+        AlunoBO bo = new AlunoBO();
+        try {
+            bo.alterar(aluno);
+        } catch (NegocioException ex) {
+            throw new ServletException("ERRO AQUi", ex);
+        }
+
+        response.sendRedirect(request.getContextPath()+"/aluno");
+        
     }
 
     /**
@@ -117,5 +113,5 @@ public class ListarAlunoServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
 }
