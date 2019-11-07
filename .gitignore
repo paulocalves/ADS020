@@ -21,3 +21,30 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/Atividade_01/nbproject/private/
+/meusite/nbproject/private/
+/MeuJavaWeb/nbproject/private/
+/MeuJavaWeb/build/
+/MeuJavaWeb/dist/
+/Atividade03/nbproject/private/
+/Atividade03/build/
+/Atividade03/dist/
+/Atividade04/nbproject/private/
+/Atividade04/build/
+/Atividade05/nbproject/private/
+/Atividade05/build/
+/Atividade05/dist/
+/Atividade06/nbproject/private/
+/Atividade07/nbproject/private/
+/Atividade07/build/
+/Atividade09/nbproject/private/
+/Atividade09/build/
+/Atividade16/nbproject/private/
+/Atividade16/LojaVirtual/nbproject/private/
+/Atividade16/CarrinhoEJB/nbproject/private/
+/Atividade18/nbproject/private/
+/Atividade18/CadastroWeb/nbproject/private/
+/Atividade18/CadastroEJB/nbproject/private/
+/Atividade19/nbproject/private/
+/Atividade19/build/
+/Atividade19/dist/
